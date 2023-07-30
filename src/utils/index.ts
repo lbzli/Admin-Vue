@@ -1,6 +1,7 @@
 import type { RouteLocationNormalized, RouteRecordNormalized } from 'vue-router';
 import type { App, Plugin } from 'vue';
-
+import _ from 'lodash';
+import moment from 'moment';
 import { unref } from 'vue';
 import { isObject } from '/@/utils/is';
 
@@ -89,3 +90,33 @@ export const withInstall = <T>(component: T, alias?: string) => {
   };
   return component as T & Plugin;
 };
+
+/**
+ * 生成指定长度的随机字符串
+ * @param {number} length 字符串长度
+ * @returns {string} 随机字符串
+ */
+export const generateRandomString = (length) => {
+  const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  return _.join(_.sampleSize(charset, length), '');
+};
+
+export const getWeekdaysOfMonth = (year: number, month: number) => {
+  const date = moment({ year, month: month - 1 }); // month 表示月份，从 0 开始计数
+  const daysInMonth = date.daysInMonth();
+
+  const weekdays = [];
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const isoWeekday = date.date(day).isoWeekday();
+
+    if (isoWeekday >= 1 && isoWeekday <= 5) {
+      // 1 到 5 表示周一到周五
+      weekdays.push(date.date(day).format('YYYY-M-D'));
+    }
+  }
+
+  return weekdays;
+};
+
+// console.log(getWeekdaysOfMonth(2023, 8));

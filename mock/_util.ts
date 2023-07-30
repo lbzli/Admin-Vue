@@ -56,5 +56,5 @@ export interface requestParams {
  *
  */
 export function getRequestToken({ headers }: requestParams): string | undefined {
-  return headers?.authorization;
+  return headers?.authorization?.replace('Bearer ', '');
 }
